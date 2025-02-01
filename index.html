@@ -20,6 +20,7 @@
           <ol>
             <li>Choose your colors for Player X and Player O.</li>
             <li>Click the "Start Game" button to begin.</li>
+            <li>Select a mode: Play against the AI or another player.</li>
             <li>Player X goes first. Click on any cell to place your symbol.</li>
             <li>Alternate turns until one player wins or the game ends in a draw.</li>
           </ol>
@@ -30,6 +31,13 @@
       <!-- Game Page (Hidden Initially) -->
       <div class="game-page" id="gamePage" style="display: none;">
         <h1>Tic-Tac-Toe</h1>
+        <div class="mode-selector">
+          <h2>Select Mode:</h2>
+          <select id="modeSelect">
+            <option value="twoPlayer">Two-Player Mode</option>
+            <option value="ai">AI Mode</option>
+          </select>
+        </div>
         <div class="color-picker">
           <h2>Choose Your Colors:</h2>
           <label for="colorX">Player X Color:</label>
