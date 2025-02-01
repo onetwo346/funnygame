@@ -8,11 +8,13 @@ const applyColorsBtn = document.getElementById("applyColors");
 const startBtn = document.getElementById("startBtn");
 const descriptionPage = document.getElementById("descriptionPage");
 const gamePage = document.getElementById("gamePage");
+const modeSelect = document.getElementById("modeSelect");
 
 let isXNext = true;
 let gameActive = true;
 let colorX = colorXInput.value;
 let colorO = colorOInput.value;
+let isAIMode = false;
 
 const winningCombinations = [
   [0, 1, 2],
@@ -31,6 +33,13 @@ startBtn.addEventListener("click", () => {
   gamePage.style.display = "block";
 });
 
+// Mode Selector
+modeSelect.addEventListener("change", (e) => {
+  isAIMode = e.target.value === "ai";
+  restartGame();
+});
+
+// Draw Symbol
 function drawSymbol(event) {
   if (!gameActive) return;
 
@@ -57,8 +66,23 @@ function drawSymbol(event) {
 
   isXNext = !isXNext;
   statusDisplay.innerText = `Player ${isXNext ? "X" : "O"}'s turn`;
+
+  // AI Move
+  if (isAIMode && !isXNext && gameActive) {
+    setTimeout(makeAIMove, 500);
+  }
 }
 
+// AI Move Logic
+function makeAIMove() {
+  const emptyCells = [...cells].filter((cell) => !cell.classList.contains("X") && !cell.classList.contains("O"));
+  if (emptyCells.length > 0) {
+    const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    randomCell.click();
+  }
+}
+
+// Check Win
 function checkWin(currentClass) {
   return winningCombinations.some((combination) => {
     return combination.every((index) => {
@@ -67,6 +91,7 @@ function checkWin(currentClass) {
   });
 }
 
+// Restart Game
 function restartGame() {
   isXNext = true;
   gameActive = true;
@@ -79,12 +104,14 @@ function restartGame() {
   removeBalloons();
 }
 
+// Quit Game
 function quitGame() {
   if (confirm("Are you sure you want to quit?")) {
     window.close();
   }
 }
 
+// Apply Colors
 function applyColors() {
   colorX = colorXInput.value;
   colorO = colorOInput.value;
@@ -97,6 +124,7 @@ function applyColors() {
   });
 }
 
+// Balloons Animation
 function showBalloons() {
   const balloonContainer = document.createElement("div");
   balloonContainer.classList.add("balloon-container");
@@ -115,13 +143,8 @@ function removeBalloons() {
   }
 }
 
-// Add event listeners
-cells.forEach((cell) => cell.addEventListener("mousedown", drawSymbol));
-cells.forEach((cell) => cell.addEventListener("touchstart", drawSymbol));
-
+// Event Listeners
+cells.forEach((cell) => cell.addEventListener("click", drawSymbol));
 restartBtn.addEventListener("click", restartGame);
 quitBtn.addEventListener("click", quitGame);
 applyColorsBtn.addEventListener("click", applyColors);
-
-// Apply initial colors
-applyColors();
