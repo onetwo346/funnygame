@@ -9,12 +9,14 @@ const startBtn = document.getElementById("startBtn");
 const descriptionPage = document.getElementById("descriptionPage");
 const gamePage = document.getElementById("gamePage");
 const modeSelect = document.getElementById("modeSelect");
+const difficultySelect = document.getElementById("difficultySelect");
 
 let isXNext = true;
 let gameActive = true;
 let colorX = colorXInput.value;
 let colorO = colorOInput.value;
 let isAIMode = false;
+let aiDifficulty = "beginner"; // Default difficulty
 
 const winningCombinations = [
   [0, 1, 2],
@@ -36,6 +38,12 @@ startBtn.addEventListener("click", () => {
 // Mode Selector
 modeSelect.addEventListener("change", (e) => {
   isAIMode = e.target.value === "ai";
+  restartGame();
+});
+
+// Difficulty Selector
+difficultySelect.addEventListener("change", (e) => {
+  aiDifficulty = e.target.value;
   restartGame();
 });
 
@@ -77,8 +85,88 @@ function drawSymbol(event) {
 function makeAIMove() {
   const emptyCells = [...cells].filter((cell) => !cell.classList.contains("X") && !cell.classList.contains("O"));
   if (emptyCells.length > 0) {
-    const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-    randomCell.click();
+    let chosenCell;
+    if (aiDifficulty === "beginner") {
+      // Random move for Beginner
+      chosenCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    } else if (aiDifficulty === "amateur") {
+      // Smarter move for Amateur
+      chosenCell = getBestMove(emptyCells, "O");
+    } else if (aiDifficulty === "pro") {
+      // Optimal move for Pro
+      chosenCell = getBestMove(emptyCells, "O", true);
+    }
+    chosenCell.click();
+  }
+}
+
+// Get Best Move (Minimax for Pro, Simple logic for Amateur)
+function getBestMove(emptyCells, player, isPro = false) {
+  if (isPro) {
+    // Minimax algorithm for Pro difficulty
+    let bestMove;
+    let bestScore = -Infinity;
+    emptyCells.forEach((cell) => {
+      cell.classList.add(player);
+      const score = minimax(cells, 0, false);
+      cell.classList.remove(player);
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = cell;
+      }
+    });
+    return bestMove;
+  } else {
+    // Simple logic for Amateur: Try to win or block opponent
+    for (let combination of winningCombinations) {
+      const [a, b, c] = combination;
+      if (
+        cells[a].classList.contains("O") &&
+        cells[b].classList.contains("O") &&
+        !cells[c].classList.contains("X")
+      ) {
+        return cells[c];
+      }
+      if (
+        cells[a].classList.contains("X") &&
+        cells[b].classList.contains("X") &&
+        !cells[c].classList.contains("O")
+      ) {
+        return cells[c];
+      }
+    }
+    return emptyCells[Math.floor(Math.random() * emptyCells.length)];
+  }
+}
+
+// Minimax Algorithm
+function minimax(cells, depth, isMaximizing) {
+  if (checkWin("O")) return 10 - depth;
+  if (checkWin("X")) return depth - 10;
+  if ([...cells].every((cell) => cell.classList.contains("X") || cell.classList.contains("O"))) return 0;
+
+  if (isMaximizing) {
+    let bestScore = -Infinity;
+    cells.forEach((cell, index) => {
+      if (!cell.classList.contains("X") && !cell.classList.contains("O")) {
+        cell.classList.add("O");
+        const score = minimax(cells, depth + 1, false);
+        cell.classList.remove("O");
+        bestScore = Math.max(score, bestScore);
+      }
+    });
+    return bestScore;
+  } else {
+    let bestScore = Infinity;
+    cells.forEach((cell, index) => {
+      if (!cell.classList.contains("X") && !cell.classList.contains("O")) {
+        cell.classList.add("X");
+        const score = minimax(cells, depth + 1, true);
+        cell.classList.remove("X");
+        bestScore = Math.min(score, bestScore);
+      }
+    });
+    return bestScore;
   }
 }
 
