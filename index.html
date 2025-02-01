@@ -8,32 +8,54 @@
   </head>
   <body>
     <div class="container">
-      <h1>Tic-Tac-Toe</h1>
-      <div class="color-picker">
-        <h2>Choose Your Colors:</h2>
-        <label for="colorX">Player X Color:</label>
-        <input type="color" id="colorX" value="#ff4d4d" />
-        <label for="colorO">Player O Color:</label>
-        <input type="color" id="colorO" value="#4d94ff" />
-        <button id="applyColors">Apply Colors</button>
+      <!-- Description Page -->
+      <div class="description-page" id="descriptionPage">
+        <h1>Welcome to Tic-Tac-Toe!</h1>
+        <p>
+          Tic-Tac-Toe is a classic two-player game where players take turns marking spaces in a 3x3 grid. 
+          The goal is to be the first to get three of your symbols (X or O) in a row horizontally, vertically, or diagonally.
+        </p>
+        <p>
+          <strong>How to Play:</strong>
+          <ol>
+            <li>Choose your colors for Player X and Player O.</li>
+            <li>Click the "Start Game" button to begin.</li>
+            <li>Player X goes first. Click on any cell to place your symbol.</li>
+            <li>Alternate turns until one player wins or the game ends in a draw.</li>
+          </ol>
+        </p>
+        <button id="startBtn" class="pulsate">Start Game</button>
       </div>
-      <div class="game-board" id="gameBoard">
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
-        <div class="cell" data-cell></div>
+
+      <!-- Game Page (Hidden Initially) -->
+      <div class="game-page" id="gamePage" style="display: none;">
+        <h1>Tic-Tac-Toe</h1>
+        <div class="color-picker">
+          <h2>Choose Your Colors:</h2>
+          <label for="colorX">Player X Color:</label>
+          <input type="color" id="colorX" value="#ff4d4d" />
+          <label for="colorO">Player O Color:</label>
+          <input type="color" id="colorO" value="#4d94ff" />
+          <button id="applyColors">Apply Colors</button>
+        </div>
+        <div class="game-board" id="gameBoard">
+          <div class="cell" data-cell></div>
+          <div class="cell" data-cell></div>
+          <div class="cell" data-cell></div>
+          <div class="cell" data-cell></div>
+          <div class="cell" data-cell></div>
+          <div class="cell" data-cell></div>
+          <div class="cell" data-cell></div>
+          <div class="cell" data-cell></div>
+          <div class="cell" data-cell></div>
+        </div>
+        <div class="controls">
+          <button id="restartBtn">Restart</button>
+          <button id="quitBtn">Quit</button>
+        </div>
+        <p id="status">Player X's turn</p>
+        <p class="footer">Designed by Nana Kofi Fosu</p>
       </div>
-      <div class="controls">
-        <button id="restartBtn">Restart</button>
-        <button id="quitBtn">Quit</button>
-      </div>
-      <p id="status">Player X's turn</p>
-      <p class="footer">Designed by Nana Kofi Fosu</p>
     </div>
     <script src="script.js"></script>
   </body>
