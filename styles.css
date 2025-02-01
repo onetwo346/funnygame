@@ -5,7 +5,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: url("mum.jpg"); /* Make sure 'mum.jpg' is in the same directory */
+  background-image: url("mum.jpg");
   background-size: cover;
   background-position: center;
 }
@@ -23,27 +23,17 @@ body {
   border-radius: 10px;
 }
 
-.description-page h1 {
-  margin-bottom: 20px;
-}
-
-.description-page p {
-  font-size: 1.1em;
-  line-height: 1.6;
-}
-
-.description-page ol {
-  text-align: left;
-  margin: 20px auto;
-  max-width: 80%;
-}
-
 .game-page {
-  display: none; /* Hidden by default */
+  display: none;
 }
 
-h1 {
+.mode-selector {
   margin-bottom: 20px;
+}
+
+.mode-selector select {
+  padding: 5px;
+  font-size: 1em;
 }
 
 .color-picker {
@@ -112,7 +102,6 @@ button:hover {
   color: black;
 }
 
-/* Pulsating Start Button */
 @keyframes pulsate {
   0% {
     transform: scale(1);
@@ -130,7 +119,6 @@ button:hover {
   background-color: #ff4d4d;
 }
 
-/* Balloons Animation */
 @keyframes float {
   0% {
     transform: translateY(0);
