@@ -16,17 +16,12 @@ let gameActive = true;
 let colorX = colorXInput.value;
 let colorO = colorOInput.value;
 let isAIMode = false;
-let aiDifficulty = "beginner"; // Default difficulty
+let aiDifficulty = "beginner";
 
 const winningCombinations = [
-  [0, 1, 2],
-  [3, 4, 5],
-  [6, 7, 8],
-  [0, 3, 6],
-  [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8],
-  [2, 4, 6],
+  [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+  [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+  [0, 4, 8], [2, 4, 6]             // Diagonals
 ];
 
 // Start Game Button
@@ -63,12 +58,13 @@ function drawSymbol(event) {
     statusDisplay.innerText = `${currentClass} Wins!`;
     gameActive = false;
     showBalloons();
-    return;
+    return; // No auto-restart on win
   }
 
   if ([...cells].every((cell) => cell.classList.contains("X") || cell.classList.contains("O"))) {
     statusDisplay.innerText = "Draw!";
     gameActive = false;
+    setTimeout(restartGame, 2000); // Auto-restart only on draw after 2 seconds
     return;
   }
 
@@ -87,20 +83,17 @@ function makeAIMove() {
   if (emptyCells.length > 0) {
     let chosenCell;
     if (aiDifficulty === "beginner") {
-      // Random move for Beginner
       chosenCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
     } else if (aiDifficulty === "amateur") {
-      // Smarter move for Amateur
       chosenCell = getBestMove(emptyCells, "O");
     } else if (aiDifficulty === "pro") {
-      // Optimal move for Pro
       chosenCell = getBestMove(emptyCells, "O", true);
     }
     chosenCell.click();
   }
 }
 
-// Get Best Move (Minimax for Pro, Simple logic for Amateur)
+// Get Best Move
 function getBestMove(emptyCells, player, isPro = false) {
   if (isPro) {
     // Minimax algorithm for Pro difficulty
@@ -147,7 +140,7 @@ function minimax(cells, depth, isMaximizing) {
 
   if (isMaximizing) {
     let bestScore = -Infinity;
-    cells.forEach((cell, index) => {
+    cells.forEach((cell) => {
       if (!cell.classList.contains("X") && !cell.classList.contains("O")) {
         cell.classList.add("O");
         const score = minimax(cells, depth + 1, false);
@@ -158,7 +151,7 @@ function minimax(cells, depth, isMaximizing) {
     return bestScore;
   } else {
     let bestScore = Infinity;
-    cells.forEach((cell, index) => {
+    cells.forEach((cell) => {
       if (!cell.classList.contains("X") && !cell.classList.contains("O")) {
         cell.classList.add("X");
         const score = minimax(cells, depth + 1, true);
