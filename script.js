@@ -5,6 +5,9 @@ const quitBtn = document.getElementById("quitBtn");
 const colorXInput = document.getElementById("colorX");
 const colorOInput = document.getElementById("colorO");
 const applyColorsBtn = document.getElementById("applyColors");
+const startBtn = document.getElementById("startBtn");
+const descriptionPage = document.getElementById("descriptionPage");
+const gamePage = document.getElementById("gamePage");
 
 let isXNext = true;
 let gameActive = true;
@@ -22,6 +25,12 @@ const winningCombinations = [
   [2, 4, 6],
 ];
 
+// Start Game Button
+startBtn.addEventListener("click", () => {
+  descriptionPage.style.display = "none";
+  gamePage.style.display = "block";
+});
+
 function drawSymbol(event) {
   if (!gameActive) return;
 
@@ -31,19 +40,16 @@ function drawSymbol(event) {
   const currentClass = isXNext ? "X" : "O";
   cell.classList.add(currentClass);
   cell.style.color = isXNext ? colorX : colorO;
-  cell.textContent = currentClass; // Add symbol to cell
+  cell.textContent = currentClass;
 
   if (checkWin(currentClass)) {
     statusDisplay.innerText = `${currentClass} Wins!`;
     gameActive = false;
+    showBalloons();
     return;
   }
 
-  if (
-    [...cells].every(
-      (cell) => cell.classList.contains("X") || cell.classList.contains("O")
-    )
-  ) {
+  if ([...cells].every((cell) => cell.classList.contains("X") || cell.classList.contains("O"))) {
     statusDisplay.innerText = "Draw!";
     gameActive = false;
     return;
@@ -67,21 +73,21 @@ function restartGame() {
   statusDisplay.innerText = `Player X's turn`;
   cells.forEach((cell) => {
     cell.classList.remove("X", "O");
-    cell.textContent = ""; // Clear symbol
-    cell.style.color = ""; // Reset color
+    cell.textContent = "";
+    cell.style.color = "";
   });
+  removeBalloons();
 }
 
 function quitGame() {
   if (confirm("Are you sure you want to quit?")) {
-    window.close(); // Note: `window.close()` might not work in all browsers or might require user confirmation.
+    window.close();
   }
 }
 
 function applyColors() {
   colorX = colorXInput.value;
   colorO = colorOInput.value;
-  // Apply colors to cells based on current player
   cells.forEach((cell) => {
     if (cell.classList.contains("X")) {
       cell.style.color = colorX;
@@ -89,6 +95,24 @@ function applyColors() {
       cell.style.color = colorO;
     }
   });
+}
+
+function showBalloons() {
+  const balloonContainer = document.createElement("div");
+  balloonContainer.classList.add("balloon-container");
+  for (let i = 0; i < 5; i++) {
+    const balloon = document.createElement("div");
+    balloon.classList.add("balloon");
+    balloonContainer.appendChild(balloon);
+  }
+  document.body.appendChild(balloonContainer);
+}
+
+function removeBalloons() {
+  const balloonContainer = document.querySelector(".balloon-container");
+  if (balloonContainer) {
+    balloonContainer.remove();
+  }
 }
 
 // Add event listeners
